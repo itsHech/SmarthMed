@@ -1,0 +1,3 @@
+com/example/smartmed/SmartMedApplication.class
+com/example/smartmed/filters/JwtRequestFilter.class
+com/example/smartmed/configuration/WebSecurityConfiguration.class

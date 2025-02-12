@@ -1,0 +1,364 @@
+  <!-- Contact Section -->
+  <section id="contact" class="contact section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+      <h2>Loan Simulator</h2>
+      <p>Enter your key information to calculate loan feasibility and monthly payment amounts.</p>
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+      <div class="row gy-4">
+
+        <div class="col-lg-5">
+
+          <div class="info-wrap">
+         
+
+            <form id="regForm" action="">
+
+                            <!-- step 1-->
+
+              <!-- One "tab" for each step in the form: -->
+              <div class="tab">What is your professional status? - ما هو وضعك المهني؟
+                <!--<p><input placeholder="First name..." oninput="this.className = ''"></p>
+                <p><input placeholder="Last name..." oninput="this.className = ''"></p>-->
+                
+                <div>
+                  <input type="radio" name="status" value="titulaire" formControlName="select" id="titulaire" onchange="this.className = ''">
+                  <label for="titulaire" class="option">
+                    <span translate>Permanent Employee - موظف مرسم</span>
+                    <div class="dot"></div>
+                  </label>
+                
+                  <input type="radio" name="status" value="professionnel" formControlName="select" id="professionnel" onchange="this.className = ''">
+                  <label for="professionnel" class="option">
+                    <span translate>Liberal Profession - مهني حر</span>
+                    <div class="dot"></div>
+                  </label>
+                
+                  <input type="radio" name="status" value="contractuel" formControlName="select" id="contractuel" onchange="this.className = ''">
+                  <label for="contractuel" class="option">
+                    <span translate>Contractual Employee - موظف غير مرسم</span>
+                    <div class="dot"></div>
+                  </label>
+
+                </div>  
+                 
+                
+              </div>
+
+
+                            <!-- step 2-->
+
+              <div class="tab">What type of loan is required? - ما هو نوع القرض المطلوب؟
+                <div>
+                  <input type="radio" name="loan" value="consommation" formControlName="nature" id="option-1" onchange="this.className = ''">
+                  <label for="option-1" class="option">
+                    <span translate>Consumer Credit - قرض استهلاكي</span>
+                    <div class="dot"></div>
+                  </label>
+                
+                  <input type="radio" name="loan" value="auto" formControlName="nature" id="option-2" (onchange)="changeApport()">
+                  <label for="option-2" class="option">
+                    <span translate>car Loan - قرض السيارة</span>
+                    <div class="dot"></div>
+                  </label>
+                
+                  <input type="radio" name="loan" value="immobilier" formControlName="nature" id="option-3"  (onchange)="changeApport()">
+                  <label for="option-3" class="option">
+                    <span translate>Mortgage Loan - قرض عقاري</span>
+                    <div class="dot"></div>
+                  </label>
+                </div> 
+              </div>
+              
+                            <!-- step 3 -->
+
+                            <div class="tab">
+                              <p><span style="font-weight: bold;">Income - الدخل</span></p>
+                            
+                              <div class="form-group">
+                                <label for="salaire" translate>Gross_Annual_Salary</label>
+                                <div class="input-wrapper">
+                                  <input
+                                    id="salaire"
+                                    formControlName="salaire"
+                                    min="0"
+                                    type="number"
+                                    [ngClass]="{ 'is-invalid': submitted1 && f1['salaire'].errors && f1['salaire'].value < 1 }"
+
+                                    placeholder="0"
+                                    class="form-control"
+                                  />
+                                  <span class="currency">DT</span>
+                                </div>
+                              </div>
+                              
+                              <div *ngIf="submitted1 && f1['salaire'].errors && f1['salaire'].value < 1" class="invalid-feedback">
+                                <div translate>Salaire annuel brut est obligatoire et doit être supérieur à 0.000 dt</div>
+                              </div>
+                            
+                              <div class="form-group">
+                                <label for="dividendes" translate>Dividends - الأرباح</label>
+                                <div class="input-wrapper">
+                                  <input
+                                    id="dividendes"
+                                    formControlName="dividendes"
+                                    type="number"
+                                    min="0"
+                                    placeholder="0"
+                                    class="form-control"
+                                  />
+                                  <span class="currency">DT</span>
+                                </div>
+                              </div>
+                            
+                              <div class="form-group">
+                                <label for="autre" translate>Others</label>
+                                <div class="input-wrapper">
+                                  <input
+                                    id="autre"
+                                    formControlName="autre"
+                                    type="number"
+                                    min="0"
+                                    placeholder="0"
+                                    class="form-control"
+                                  />
+                                  <span class="currency">DT</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- step 4-->
+
+              <div class="tab">
+                
+                <div class="form-group">
+                  <label for="autre" translate>Requested Amount - المبلغ المطلوب</label>
+                  <div class="input-wrapper">
+                    <input
+                      id="autre"
+                      formControlName="montant"
+                      type="number"
+                      min="0"
+                      placeholder="0"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted2 && f2['montant'].errors }"
+                      required
+                      (input)="inpmontant($event)"
+                    />
+                    <span class="currency">DT</span>
+                  </div>
+                  <div *ngIf="submitted2 && f2['montant'].errors" class="invalid-feedback">
+                    <div translate>Montant est obligatoire</div>
+                  </div>
+                </div>
+                
+
+                <div class="form-group">
+                  <label translate for="">Self Financing - التمويل الذاتي</label>
+                  <h6 class="appersonel">{{ apportPersonnel }} DT</h6>
+                  <div class="range-wrap" *ngIf="isImmobiler">
+                    <input
+                      #range
+                      type="range"
+                      class="range mt-3"
+                      value="20"
+                      [min]="minapport"
+                      max="100"
+                      (input)="setBuble(range, bubble)"
+                    />
+                    <output #bubble class="bubble"></output>
+                  </div>
+                  <div class="range-wrap" *ngIf="isauto">
+                    <input
+                      #range
+                      type="range"
+                      class="range mt-3"
+                      value="40"
+                      [min]="minapport"
+                      max="100"
+                      (input)="setBuble(range, bubble)"
+                    />
+                    <output #bubble class="bubble"></output>
+                  </div>
+                  <div class="range-wrap" *ngIf="isConsommation">
+                    <input
+                      #range
+                      type="range"
+                      class="range mt-3"
+                      value="0"
+                      [min]="minapport"
+                      max="100"
+                      (input)="setBuble(range, bubble)"
+                    />
+                    <output #bubble class="bubble"></output>
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <label translate for="">Duration - المدة
+                  </label>
+                  <div class="range-wrap">
+                    <input
+                      #range2
+                      type="range"
+                      class="range mt-2"
+                      value="1"
+                      min="1"
+                      max="5"
+                      [max]="maxAnnee"
+                      (input)="setDuree(range2, bubble2)"
+                    />
+                    <output #bubble2 class="bubble"></output>
+                  </div>
+                </div>
+
+              </div>
+
+                            <!-- step 5-->
+
+             <div class="tab">
+  <span style="font-weight: bold;">
+    <p>Relationship with the bank - علاقتك مع البنك</p>
+  </span>
+
+  <div class="form-group">
+    <label translate for="">What is your bank? - ما هو بنكك؟</label>
+    <select formControlName="nomBanque" class="form-control">
+      <option value=""></option>
+      <option *ngFor="let item of banquesList" [value]="item._id">
+        {{ item.bankName }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label translate>Do you have a Current loan? - هل لديك قرض جارٍ؟</label>
+    <div class="wrap">
+      <div class="option-container">
+        <input
+          #creditoui
+          formControlName="checkImpayé"
+          type="radio"
+          value="true"
+          id="oui"
+          name="choix1"
+        />
+        <label for="oui" class="option">
+          <span translate>Yes - نعم</span>
+          <div class="dot"></div>
+        </label>
+      </div>
+      <div class="option-container">
+        <input
+          id="non"
+          type="radio"
+          formControlName="checkImpayé"
+          value="false"
+          name="choix1"
+        />
+        <label for="non" class="option">
+          <span translate>No - لا</span>
+          <div class="dot"></div>
+        </label>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label translate>Do you have any unpaid checks? - هل لديك شيكات غير مدفوعة؟</label>
+    <div class="wrap">
+      <div class="option-container">
+        <input
+          #credit
+          id="chequeoui"
+          type="radio"
+          formControlName="checkImpayé"
+          value="true"
+          name="choix2"
+        />
+        <label for="chequeoui" class="option">
+          <span translate>Yes - نعم</span>
+          <div class="dot"></div>
+        </label>
+      </div>
+      <div class="option-container">
+        <input
+          id="chequenon"
+          type="radio"
+          formControlName="checkImpayé"
+          value="false"
+          name="choix2"
+        />
+        <label for="chequenon" class="option">
+          <span translate>No - لا</span>
+          <div class="dot"></div>
+        </label>
+      </div>
+    </div>
+  </div>
+  
+
+</div>
+
+
+                            <!-- step 6 -->
+                            <div class="tab congratulations-message">
+                              <h2>Congratulations - تهانينا</h2>
+                              <div class="payment-info">
+                                <span class="mens">Monthly payment - القسط الشهري <br ><span class="prix">{{ mensualite }} DT</span></span>
+                              </div>
+
+
+                              <p class="info-text">
+                                  يُسرنا إعلامكم بوجود إمكانية للحصول على قرض, خبراؤنا جاهزون لتقديم المساعدة في طلبكم.
+                                  <br><br>
+                                  Congratulations, your eligibility assessment is favorable. Our experts are available to assist you with your credit application.
+                              </p>
+                             
+                              <div class="contact-info">
+                                  <p>
+                                      <strong>البريد الإلكتروني - Email:</strong> contact&#64;easybank.tn
+                                      <br>
+                                      <strong>الهاتف - Phone:</strong> +21642550600
+                                  </p>
+                              </div>
+                          </div>
+
+              
+             <div style="overflow:auto;">
+                <div style="float:right;">
+                  <button  class="btn" type="button" id="prevBtn" onclick="nextPrev(-1)">Previous- السابق</button>
+                  <button class="btn" type="button" id="nextBtn" onclick="nextPrev(1)">Next- التالى</button>
+                </div>
+              </div>   
+              
+              <div style="text-align:center;margin-top:40px;">
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+
+              </div>
+              
+              </form> 
+
+            
+
+           
+          </div>
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+  </section><!-- /Contact Section -->

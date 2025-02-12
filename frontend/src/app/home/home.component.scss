@@ -1,0 +1,52 @@
+.header {
+  background-color: white;
+  padding: 15px 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.header.scrolled {
+  background-color: #f8f9fa;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+  transform: translateY(-5px) scale(1.02);
+}
+
+.mobile-nav-toggle {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .mobile-nav-toggle {
+    display: block;
+  }
+  
+  .navmenu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: white;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .navmenu.open {
+    display: block; 
+  }
+
+  .navmenu ul {
+    flex-direction: column;
+  }
+
+  .navmenu ul li a {
+    display: block;
+    padding: 10px 0;
+  }
+}
