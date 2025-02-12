@@ -1,42 +1,47 @@
 package com.example.smartmed.services.impl;
 
+
 import com.example.smartmed.dtos.SignupRequest;
 import com.example.smartmed.models.User;
 import com.example.smartmed.repositories.UserRepository;
 import com.example.smartmed.services.RegisterService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class RegisterServiceImpl implements RegisterService {
-    
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private UserRepository userRepository;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public RegisterServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     @Override
     public User createUser(SignupRequest signupRequest) {
-        if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
-            throw new RuntimeException("Cet email existe déjà");
+        if (userRepository.existsByEmail(signupRequest.getEmail())) {
+            return null;
         }
-
         User user = new User();
-        user.setEmail(signupRequest.getEmail());
+        BeanUtils.copyProperties(signupRequest,user);
+        String hashPassword = passwordEncoder.encode(signupRequest.getPassword());
         user.setFirstName(signupRequest.getFirstName());
         user.setLastName(signupRequest.getLastName());
-        user.setPhoneNumber(signupRequest.getPhoneNumber());
-        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        user.setPassword(hashPassword);
+        user.setPhoneNumber(String.valueOf(signupRequest.getPhoneNumber()));
         user.setCreatedAt(LocalDateTime.now());
 
-        try {
-            return userRepository.save(user);
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la sauvegarde de l'utilisateur: " + e.getMessage());
-        }
+        User createdCustomer = userRepository.save(user);
+        user.setId(createdCustomer.getId());
+        return user;
     }
 }

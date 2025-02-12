@@ -29,26 +29,18 @@ public class WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-        security
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**", "/error").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/dashboard", true)
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .failureUrl("/login?error=true")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout=true")
-                .permitAll()
-            );
-
-        return security.build();
+        return security.csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/register", "/login", "/api/patients").permitAll()
+                .and()
+                .authorizeHttpRequests().requestMatchers("/api/**")
+                .authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean

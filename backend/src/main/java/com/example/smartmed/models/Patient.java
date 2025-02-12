@@ -36,4 +36,6 @@ public class Patient extends User {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChatbotInteraction> interactions;
 
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Rendezvous> rendezvous;
 }

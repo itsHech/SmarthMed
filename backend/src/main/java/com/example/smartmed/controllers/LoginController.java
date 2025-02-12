@@ -1,8 +1,8 @@
 package com.example.smartmed.controllers;
 
+
 import com.example.smartmed.dtos.LoginRequest;
-import com.example.smartmed.models.User;
-import com.example.smartmed.repositories.UserRepository;
+import com.example.smartmed.dtos.LoginResponse;
 import com.example.smartmed.services.impl.LoginServiceImpl;
 import com.example.smartmed.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,65 +12,43 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.io.IOException;
+
+@RestController
 public class LoginController {
 
     private final AuthenticationManager authenticationManager;
+
     private final LoginServiceImpl loginService;
+
     private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public LoginController(AuthenticationManager authenticationManager, LoginServiceImpl loginService, JwtUtil jwtUtil, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public LoginController(AuthenticationManager authenticationManager, LoginServiceImpl loginService, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.loginService = loginService;
         this.jwtUtil = jwtUtil;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @GetMapping("/login")
-    public String showLoginPage(Model model, String error) {
-        if (error != null) {
-            model.addAttribute("errorMessage", "Email ou mot de passe incorrect");
-        }
-        model.addAttribute("loginRequest", new LoginRequest());
-        return "login";
     }
 
     @PostMapping("/login")
-    public String loginUser(@ModelAttribute LoginRequest loginRequest, Model model) {
+    public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) throws IOException {
         try {
-            Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
-            if (!userOptional.isPresent()) {
-                model.addAttribute("errorMessage", "Utilisateur non trouvé");
-                return "login";
-            }
-
-            User user = userOptional.get();
-            
-            if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-                model.addAttribute("errorMessage", "Mot de passe incorrect");
-                return "login";
-            }
-
-            return "redirect:/dashboard";
-            
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "Erreur lors de la connexion: " + e.getMessage());
-            return "login";
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Incorrect email or password.");
+        } catch (DisabledException disabledException) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Customer is not activated");
+            return null;
         }
+        final UserDetails userDetails = loginService.loadUserByUsername(loginRequest.getEmail());
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+
+        return new LoginResponse(jwt);
     }
+
 }
-
-
