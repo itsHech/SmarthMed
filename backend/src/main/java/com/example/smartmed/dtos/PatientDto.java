@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -36,8 +37,7 @@ public class PatientDto {
     
     @NotNull(message = "Birth date is required")
     @Past(message = "Birth date must be in the past")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @NotBlank(message = "Gender is required")
     @Pattern(regexp = "^(Male|Female)$", message = "Gender must be either 'Male' or 'Female'")

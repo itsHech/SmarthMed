@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
 
 
 import java.sql.Timestamp;
@@ -34,6 +33,7 @@ public class Rendezvous {
     @Column(nullable = false)
     private String status;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
     private Timestamp createdAt;
 }

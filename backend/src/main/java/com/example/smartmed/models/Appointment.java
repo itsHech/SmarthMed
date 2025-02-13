@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
-
-
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,9 +16,15 @@ import java.util.Objects;
 @Entity
 @Table(name = "appointments")
 public class Appointment {
+    public enum Status {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
@@ -30,15 +34,19 @@ public class Appointment {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @Column(name = "appointment_date", nullable = false)
-    private Timestamp appointmentDate;
+    @Column(nullable = false)
+    private LocalDateTime startTime;
 
     @Column(nullable = false)
-    private String status;
+    private LocalDateTime endTime;
 
+    private String description;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String reason;
+    private Status status = Status.PENDING;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
     private Timestamp createdAt;
 }

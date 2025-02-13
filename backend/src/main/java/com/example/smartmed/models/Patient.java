@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -17,14 +18,11 @@ import java.util.List;
 @Entity
 @Table(name = "patients")
 public class Patient extends User {
-    @Column(name = "birth_date", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date birthDate;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
-    @Column(nullable = false)
     private String gender;
 
-    @Column(nullable = false)
     private String address;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

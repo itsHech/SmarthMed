@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,7 +31,6 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setPassword(passwordEncoder.encode(doctorDTO.getPassword()));
         doctor.setSpecialty(doctorDTO.getSpecialty());
         doctor.setLicenseNumber(doctorDTO.getLicenseNumber());
-        doctor.setCreatedAt(LocalDateTime.now());
 
         return doctorRepository.save(doctor);
     }
