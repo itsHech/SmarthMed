@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardMedecinComponent } from './dashboard-medecin/dashboard-medecin.component';
 import { DashboardPatientComponent } from './dashboard-patient/dashboard-patient.component';
+import { PatientViewerComponent } from './patient-viewer/patient-viewer.component';
 
 
 
@@ -25,7 +26,8 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component:RegisterComponent },
     { path: 'dashboardMedecin', component: DashboardMedecinComponent },
-    { path: 'dashboardPatient', component: DashboardPatientComponent }
+    { path: 'dashboardPatient', component: DashboardPatientComponent },
+    { path: 'patientViewer', component: PatientViewerComponent }
 
 
 ];
