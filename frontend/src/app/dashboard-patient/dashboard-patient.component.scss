@@ -1,0 +1,52 @@
+.supplements-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  
+    grid-template-rows: repeat(2, auto);   
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .supplement {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .supplement-image {
+    width: 100px; 
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 20px;
+  }
+  
+  .supplement-name {
+    font-weight: bold;
+  }
+  
+  .supplement-details {
+    color: #666;
+  }
+  
+
+  .ps-3 {
+    display: flex;
+    align-items: center; 
+  }
+  
+  .ps-3 h4 {
+    margin-right: 2px;
+    color: rgb(35, 35, 167);
+  }
+  
+  .ps-3 img {
+    width: 70px;
+    height: 90px; 
+    object-fit: cover;
+  }
+  
+.col-xxl-4 h4{
+    color: rgb(35, 35, 167); 
+    font-weight: bold;
+}
