@@ -9,5 +9,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './dashboard-medecin.component.scss'
 })
 export class DashboardMedecinComponent {
-
+  
 }

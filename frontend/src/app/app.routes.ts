@@ -17,16 +17,13 @@ import { DashboardPatientComponent } from './dashboard-patient/dashboard-patient
 
 
 export const routes: Routes = [ 
-    { path: 'home', component: HomeComponent ,data: { title: 'EasyBank' } },
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'services', component: ServicesComponent , },
+    { path: '', component: HomeComponent ,data: { title: 'EasyBank' } },
+    { path: 'services', component: ServicesComponent },
     { path: 'company', component: AboutComponent } ,
     { path: 'conatct', component: ContactComponent } ,
     { path: 'qa', component: QaComponent},
-    //{ path: 'form',component: FormComponent , data: { title: 'Form' }} ,
-   // { path: 'loan-calculator', component: CalculatorComponent }
     { path: 'login', component: LoginComponent },
-    { path: 'Register', component:RegisterComponent},
+    { path: 'register', component:RegisterComponent },
     { path: 'dashboardMedecin', component: DashboardMedecinComponent },
     { path: 'dashboardPatient', component: DashboardPatientComponent }
 
