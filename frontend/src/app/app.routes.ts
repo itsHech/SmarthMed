@@ -17,7 +17,7 @@ import { DashboardPatientComponent } from './dashboard-patient/dashboard-patient
 
 
 export const routes: Routes = [ 
-    { path: '', component: HomeComponent ,data: { title: 'EasyBank' } },
+    { path: '', component: HomeComponent ,data: { title: 'SmartMed' } },
     { path: 'services', component: ServicesComponent },
     { path: 'company', component: AboutComponent } ,
     { path: 'conatct', component: ContactComponent } ,
